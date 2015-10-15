@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mule-ss="http://www.mulesoft.org/schema/mule/spring-security"
+    xmlns:ss="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/spring-security http://www.mulesoft.org/schema/mule/spring-security/3.1/mule-spring-security.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+<http:endpoint name="HTTPEndPoint" host="localhost" port="8084" path="basic" doc:name="HTTP"/>
+
+<spring:beans>
+	<ss:authentication-manager alias="BasicAuth">
+		<ss:authentication-provider>
+			<ss:user-service>
+				<ss:user name="Naveen" password="1234" authorities="ROLE_ADMIN"/>
+				<ss:user name="user1" password="1234" authorities="ROLE_ADMIN"/>
+			</ss:user-service>
+		</ss:authentication-provider>
+	</ss:authentication-manager>
+</spring:beans>
+
+<mule-ss:security-manager name="muleSecurityManager">
+	<mule-ss:delegate-security-provider delegate-ref="BasicAuth" name="delg"/>
+</mule-ss:security-manager>
+
+    <flow name="basic_authenticationFlow">
+    	<inbound-endpoint  doc:name="HTTP" >
+    		<mule-ss:http-security-filter realm="Service Authentication" securityManager-ref="muleSecurityManager"/>   	
+    	</inbound-endpoint>
+    	<set-payload value="Succssfully logged in!" doc:name="Set Payload"/>
+    </flow>
+</mule>
