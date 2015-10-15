@@ -33,6 +33,6 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
     	<inbound-endpoint  doc:name="HTTP" >
     		<mule-ss:http-security-filter realm="Service Authentication" securityManager-ref="muleSecurityManager"/>   	
     	</inbound-endpoint>
-    	<set-payload value="Succssfully logged in!" doc:name="Set Payload"/>
+    	<set-payload value="Succssfully logged in! Yahooo!!!" doc:name="Set Payload"/>
     </flow>
 </mule>
